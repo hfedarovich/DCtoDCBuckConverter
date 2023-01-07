@@ -14,6 +14,7 @@ namespace DCtoDCBuckConverter
     public partial class Form1 : Form
     {
         string senddata;
+        string receivedata;
         public Form1()
         {
             InitializeComponent();
@@ -144,6 +145,31 @@ namespace DCtoDCBuckConverter
             {
                 tBoxReceiveData.Text = "";
             }
+        }
+
+        private void tBoxReceiveData_TextChanged(object sender, EventArgs e)
+        {
+            receivedata = serialPort1.ReadExisting();
+            //this methode is for showing the data in textbox
+            this.Invoke(new EventHandler(ShowData));
+        }
+
+        private void ShowData(object sender, EventArgs e)
+        {
+            if (chBoxUpdate.Checked)
+            {
+                tBoxReceiveData.Text = receivedata;
+            }
+            else
+            {
+                tBoxReceiveData.Text += receivedata;
+            }
+            
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+
         }
     }
 }
