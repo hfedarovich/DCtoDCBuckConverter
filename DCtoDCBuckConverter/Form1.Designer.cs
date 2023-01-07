@@ -29,12 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cBoxParity = new System.Windows.Forms.ComboBox();
@@ -84,7 +80,11 @@
             this.btnSendDataByTrackBar = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.btnContinueGraph = new System.Windows.Forms.Button();
+            this.btnClearGraph = new System.Windows.Forms.Button();
+            this.btnStopGraph = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -94,7 +94,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.tBarSetCurrentLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tBarSetTargetVoltage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
+            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -621,44 +621,71 @@
             // 
             // chart1
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(831, 103);
+            chartArea4.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chart1.Legends.Add(legend4);
+            this.chart1.Location = new System.Drawing.Point(15, 28);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(677, 506);
+            this.chart1.Size = new System.Drawing.Size(662, 506);
             this.chart1.TabIndex = 6;
             this.chart1.Text = "chart1";
             this.chart1.Click += new System.EventHandler(this.chart1_Click);
             // 
-            // chart2
+            // timer1
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(1395, 361);
-            this.chart2.Name = "chart2";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart2.Series.Add(series2);
-            this.chart2.Size = new System.Drawing.Size(300, 300);
-            this.chart2.TabIndex = 7;
-            this.chart2.Text = "chart2";
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.time_1Tick);
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.btnContinueGraph);
+            this.groupBox7.Controls.Add(this.btnClearGraph);
+            this.groupBox7.Controls.Add(this.btnStopGraph);
+            this.groupBox7.Controls.Add(this.chart1);
+            this.groupBox7.Location = new System.Drawing.Point(827, 12);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(695, 662);
+            this.groupBox7.TabIndex = 6;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Graph";
+            // 
+            // btnContinueGraph
+            // 
+            this.btnContinueGraph.Location = new System.Drawing.Point(241, 558);
+            this.btnContinueGraph.Name = "btnContinueGraph";
+            this.btnContinueGraph.Size = new System.Drawing.Size(209, 23);
+            this.btnContinueGraph.TabIndex = 9;
+            this.btnContinueGraph.Text = "CONTINUE";
+            this.btnContinueGraph.UseVisualStyleBackColor = true;
+            this.btnContinueGraph.Click += new System.EventHandler(this.btnContinueGraph_Click);
+            // 
+            // btnClearGraph
+            // 
+            this.btnClearGraph.Location = new System.Drawing.Point(468, 558);
+            this.btnClearGraph.Name = "btnClearGraph";
+            this.btnClearGraph.Size = new System.Drawing.Size(209, 23);
+            this.btnClearGraph.TabIndex = 8;
+            this.btnClearGraph.Text = "CLEAR";
+            this.btnClearGraph.UseVisualStyleBackColor = true;
+            this.btnClearGraph.Click += new System.EventHandler(this.btnClearGraph_Click);
+            // 
+            // btnStopGraph
+            // 
+            this.btnStopGraph.Location = new System.Drawing.Point(15, 558);
+            this.btnStopGraph.Name = "btnStopGraph";
+            this.btnStopGraph.Size = new System.Drawing.Size(209, 23);
+            this.btnStopGraph.TabIndex = 7;
+            this.btnStopGraph.Text = "STOP";
+            this.btnStopGraph.UseVisualStyleBackColor = true;
+            this.btnStopGraph.Click += new System.EventHandler(this.btnStopGraph_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1534, 686);
-            this.Controls.Add(this.chart2);
-            this.Controls.Add(this.chart1);
+            this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
@@ -683,7 +710,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.tBarSetCurrentLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tBarSetTargetVoltage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
+            this.groupBox7.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -739,7 +766,11 @@
         private System.Windows.Forms.TextBox tBoxCurrentLimit;
         private System.Windows.Forms.TextBox tBoxtargetVoltage;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Button btnContinueGraph;
+        private System.Windows.Forms.Button btnClearGraph;
+        private System.Windows.Forms.Button btnStopGraph;
     }
 }
 

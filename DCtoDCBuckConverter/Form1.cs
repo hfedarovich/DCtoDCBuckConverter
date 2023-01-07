@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DCtoDCBuckConverter
@@ -23,6 +24,7 @@ namespace DCtoDCBuckConverter
         Int32 CurrentLimit;
         string OutputMode;
         string Output;
+        bool graph = true;
 
         public Form1()
         {
@@ -106,6 +108,20 @@ namespace DCtoDCBuckConverter
                 CurrentLimit = Convert.ToInt32(datalist[3]);
                 OutputMode = datalist[4];
                 Output = datalist[5];
+                if (Output == "on")
+                {
+                    if (graph)
+                    {
+                        //empty chart
+                        graph = false;
+                    }
+                    //print all the points
+
+                }
+                if (Output == "off")
+                {
+                    graph = true;
+                }
             }
 
 
@@ -292,6 +308,26 @@ namespace DCtoDCBuckConverter
         private void chart1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void time_1Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnStopGraph_Click(object sender, EventArgs e)
+        {
+            //Stop graph
+        }
+
+        private void btnContinueGraph_Click(object sender, EventArgs e)
+        {
+            //Continue graph
+        }
+
+        private void btnClearGraph_Click(object sender, EventArgs e)
+        {
+            //Clear graph
         }
     }
 }
