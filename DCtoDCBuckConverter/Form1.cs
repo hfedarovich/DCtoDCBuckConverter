@@ -16,7 +16,14 @@ namespace DCtoDCBuckConverter
     {
         string senddata;
         string receivedata;
-        
+        string datain;
+        Int32  Voltage;
+        Int32 TargetVoltage;
+        Int32 Current;
+        Int32 CurrentLimit;
+        string OutputMode;
+        string Output;
+
         public Form1()
         {
             InitializeComponent();
@@ -86,6 +93,23 @@ namespace DCtoDCBuckConverter
             btnSendData.Enabled = true;
             btnSendDataByValues.Enabled = true;
             btnSendDataByTrackBar.Enabled = true;
+
+            if (serialPort1.IsOpen)
+            {
+                datain = serialPort1.ReadExisting();
+                Int32 count = 6;
+                string[] separator = { "\"Voltage\": ", ",\n\"Current\": ", ",\n\"TargetVoltage\": ", ",\n\"CurrentLimit\": ", ",\n\"OutputMode\": \"", "\",\n\"Output\": \"", "\"" };
+                string[] datalist = datain.Split(separator, count, StringSplitOptions.None);
+                Voltage = Convert.ToInt32(datalist[0]);
+                Current = Convert.ToInt32(datalist[1]);
+                TargetVoltage = Convert.ToInt32(datalist[2]);
+                CurrentLimit = Convert.ToInt32(datalist[3]);
+                OutputMode = datalist[4];
+                Output = datalist[5];
+            }
+
+
+
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
@@ -155,6 +179,7 @@ namespace DCtoDCBuckConverter
         private void tBoxReceiveData_TextChanged(object sender, EventArgs e)
         {
             receivedata = serialPort1.ReadExisting();
+            
             //this methode is for showing the data in textbox
             this.Invoke(new EventHandler(ShowData));
         }
@@ -250,6 +275,7 @@ namespace DCtoDCBuckConverter
                 btnSendData.Enabled = true;
                 btnSendDataByValues.Enabled = true;
                 btnSendDataByTrackBar.Enabled = true;
+                chBoxSendAutomatically.Checked = false;
                 MessageBox.Show("you need to connect to a serial port first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
@@ -259,6 +285,13 @@ namespace DCtoDCBuckConverter
                 btnSendDataByValues.Enabled = true;
                 btnSendDataByTrackBar.Enabled = true;
             }
+        }
+
+
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

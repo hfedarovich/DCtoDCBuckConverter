@@ -29,6 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cBoxParity = new System.Windows.Forms.ComboBox();
@@ -77,6 +83,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.btnSendDataByTrackBar = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -85,6 +93,8 @@
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tBarSetCurrentLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tBarSetTargetVoltage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -318,7 +328,7 @@
             this.btnSendData.Name = "btnSendData";
             this.btnSendData.Size = new System.Drawing.Size(103, 23);
             this.btnSendData.TabIndex = 0;
-            this.btnSendData.Text = "->send data";
+            this.btnSendData.Text = "-> send data";
             this.btnSendData.UseVisualStyleBackColor = true;
             this.btnSendData.Click += new System.EventHandler(this.btnSendData_Click);
             // 
@@ -428,7 +438,7 @@
             this.btnSendDataByValues.Name = "btnSendDataByValues";
             this.btnSendDataByValues.Size = new System.Drawing.Size(103, 23);
             this.btnSendDataByValues.TabIndex = 3;
-            this.btnSendDataByValues.Text = "->send data";
+            this.btnSendDataByValues.Text = "-> send data";
             this.btnSendDataByValues.UseVisualStyleBackColor = true;
             this.btnSendDataByValues.Click += new System.EventHandler(this.btnSendDataByValues_Click);
             // 
@@ -596,7 +606,7 @@
             this.btnSendDataByTrackBar.Name = "btnSendDataByTrackBar";
             this.btnSendDataByTrackBar.Size = new System.Drawing.Size(103, 23);
             this.btnSendDataByTrackBar.TabIndex = 11;
-            this.btnSendDataByTrackBar.Text = "->send data";
+            this.btnSendDataByTrackBar.Text = "-> send data";
             this.btnSendDataByTrackBar.UseVisualStyleBackColor = true;
             this.btnSendDataByTrackBar.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -609,11 +619,46 @@
             this.label13.TabIndex = 11;
             this.label13.Text = "SetTargetVoltage";
             // 
+            // chart1
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(831, 103);
+            this.chart1.Name = "chart1";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
+            this.chart1.Size = new System.Drawing.Size(677, 506);
+            this.chart1.TabIndex = 6;
+            this.chart1.Text = "chart1";
+            this.chart1.Click += new System.EventHandler(this.chart1_Click);
+            // 
+            // chart2
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart2.Legends.Add(legend2);
+            this.chart2.Location = new System.Drawing.Point(1395, 361);
+            this.chart2.Name = "chart2";
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chart2.Series.Add(series2);
+            this.chart2.Size = new System.Drawing.Size(300, 300);
+            this.chart2.TabIndex = 7;
+            this.chart2.Text = "chart2";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1235, 686);
+            this.ClientSize = new System.Drawing.Size(1534, 686);
+            this.Controls.Add(this.chart2);
+            this.Controls.Add(this.chart1);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
@@ -637,6 +682,8 @@
             this.groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tBarSetCurrentLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tBarSetTargetVoltage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -691,6 +738,8 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox tBoxCurrentLimit;
         private System.Windows.Forms.TextBox tBoxtargetVoltage;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
     }
 }
 
