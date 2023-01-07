@@ -78,6 +78,8 @@ namespace DCtoDCBuckConverter
         {
             string[] ports = SerialPort.GetPortNames();
             cBoxCOMPort.Items.AddRange(ports);
+            btnOpen.Enabled = true;
+            btnClose.Enabled = false;
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
@@ -93,10 +95,17 @@ namespace DCtoDCBuckConverter
 
                 serialPort1.Open();
                 progressBar1.Value = 100;
+
+                btnOpen.Enabled = false;
+                btnClose.Enabled = true;
+                lblstatus.Text = "connected";
             }
             catch (Exception err)
             {
-                MessageBox.Show(err.Message, "error" , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(err.Message, "Error" , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                btnOpen.Enabled = true;
+                btnClose.Enabled = false;
+                lblstatus.Text = "disconnected";
             }
         }
 
@@ -106,6 +115,9 @@ namespace DCtoDCBuckConverter
             {
                 serialPort1.Close();
                 progressBar1.Value = 0;
+                btnOpen.Enabled = true;
+                btnClose.Enabled = false;
+                lblstatus.Text = "disconnected";
             }
         }
 
@@ -115,6 +127,22 @@ namespace DCtoDCBuckConverter
             {
                 senddata = tBoxSendData.Text;
                 serialPort1.Write(senddata);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (tBoxSendData.Text != "")
+            {
+                tBoxSendData.Text = "";
+            }
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            if (tBoxReceiveData.Text != "")
+            {
+                tBoxReceiveData.Text = "";
             }
         }
     }
