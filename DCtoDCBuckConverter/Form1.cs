@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DCtoDCBuckConverter
 {
@@ -15,6 +16,7 @@ namespace DCtoDCBuckConverter
     {
         string senddata;
         string receivedata;
+        
         public Form1()
         {
             InitializeComponent();
@@ -81,6 +83,9 @@ namespace DCtoDCBuckConverter
             cBoxCOMPort.Items.AddRange(ports);
             btnOpen.Enabled = true;
             btnClose.Enabled = false;
+            btnSendData.Enabled = true;
+            btnSendDataByValues.Enabled = true;
+            btnSendDataByTrackBar.Enabled = true;
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
@@ -167,9 +172,93 @@ namespace DCtoDCBuckConverter
             
         }
 
-        private void trackBar1_Scroll(object sender, EventArgs e)
+
+        private void tBoxSetTargetValue_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void tBoxSetTargetValue_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(Char.IsDigit(e.KeyChar) || (e.KeyChar == (char)Keys.Back)))
+            {
+                MessageBox.Show("please enter digits only", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                e.Handled = true;
+            }
+        }
+
+        private void tBoxSetCurrentLimit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(Char.IsDigit(e.KeyChar) || (e.KeyChar == (char)Keys.Back)))
+            {
+                MessageBox.Show( "please enter digits only", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                e.Handled = true;
+            }
+        }
+
+        private void btnSendDataByValues_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                senddata = "\"SetTargetVoltage\": " + Convert.ToInt32(tBoxSetTargetValue.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxSetCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByValues.Text +"\"\n";
+                serialPort1.Write(senddata);
+            }
+        }
+
+        private void tBarSetTargetVoltage_Scroll(object sender, EventArgs e)
+        {
+            tBoxtargetVoltage.Text = tBarSetTargetVoltage.Value.ToString();
+        }
+
+        private void tBoxtargetVoltage_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void tBoxCurrentLimit_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tBarSetCurrentLimit_Scroll(object sender, EventArgs e)
+        {
+            tBoxCurrentLimit.Text = tBarSetCurrentLimit.Value.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                senddata = "\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"\n";
+                serialPort1.Write(senddata);
+            }
+        }
+
+        private void chBoxSendAutomatically_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chBoxSendAutomatically.Checked && serialPort1.IsOpen)
+            {
+                btnSendData.Enabled = false;
+                btnSendDataByValues.Enabled = false;
+                btnSendDataByTrackBar.Enabled = false;
+                senddata = "\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"\n";
+                serialPort1.Write(senddata);
+            }
+            
+            else if (chBoxSendAutomatically.Checked && !serialPort1.IsOpen)
+            {
+                btnSendData.Enabled = true;
+                btnSendDataByValues.Enabled = true;
+                btnSendDataByTrackBar.Enabled = true;
+                MessageBox.Show("you need to connect to a serial port first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
+            else
+            {
+                btnSendData.Enabled = true;
+                btnSendDataByValues.Enabled = true;
+                btnSendDataByTrackBar.Enabled = true;
+            }
         }
     }
 }

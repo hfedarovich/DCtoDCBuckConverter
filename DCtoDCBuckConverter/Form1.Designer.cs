@@ -65,13 +65,17 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.tBoxCurrentLimit = new System.Windows.Forms.TextBox();
+            this.tBoxtargetVoltage = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.cBoxSetOutputByTrackbar = new System.Windows.Forms.ComboBox();
             this.tBarSetCurrentLimit = new System.Windows.Forms.TrackBar();
             this.tBarSetTargetVoltage = new System.Windows.Forms.TrackBar();
             this.label11 = new System.Windows.Forms.Label();
             this.chBoxSendAutomatically = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btnSendDataByTrackBar = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -285,14 +289,14 @@
             this.groupBox3.Controls.Add(this.btnSendData);
             this.groupBox3.Location = new System.Drawing.Point(363, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(329, 210);
+            this.groupBox3.Size = new System.Drawing.Size(447, 210);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Send by text";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(209, 169);
+            this.button1.Location = new System.Drawing.Point(329, 169);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(103, 23);
             this.button1.TabIndex = 2;
@@ -305,7 +309,7 @@
             this.tBoxSendData.Location = new System.Drawing.Point(16, 28);
             this.tBoxSendData.Multiline = true;
             this.tBoxSendData.Name = "tBoxSendData";
-            this.tBoxSendData.Size = new System.Drawing.Size(296, 135);
+            this.tBoxSendData.Size = new System.Drawing.Size(416, 135);
             this.tBoxSendData.TabIndex = 1;
             // 
             // btnSendData
@@ -346,6 +350,7 @@
             this.tBoxReceiveData.Multiline = true;
             this.tBoxReceiveData.Name = "tBoxReceiveData";
             this.tBoxReceiveData.ReadOnly = true;
+            this.tBoxReceiveData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tBoxReceiveData.Size = new System.Drawing.Size(296, 205);
             this.tBoxReceiveData.TabIndex = 1;
             this.tBoxReceiveData.TextChanged += new System.EventHandler(this.tBoxReceiveData_TextChanged);
@@ -373,7 +378,7 @@
             this.groupBox5.Controls.Add(this.label6);
             this.groupBox5.Location = new System.Drawing.Point(363, 237);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(329, 173);
+            this.groupBox5.Size = new System.Drawing.Size(447, 173);
             this.groupBox5.TabIndex = 4;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Send by uploading values";
@@ -381,7 +386,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(277, 62);
+            this.label10.Location = new System.Drawing.Point(397, 62);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(35, 16);
             this.label10.TabIndex = 10;
@@ -390,7 +395,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(277, 32);
+            this.label9.Location = new System.Drawing.Point(397, 35);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(35, 16);
             this.label9.TabIndex = 9;
@@ -400,15 +405,22 @@
             // 
             this.tBoxSetCurrentLimit.Location = new System.Drawing.Point(145, 62);
             this.tBoxSetCurrentLimit.Name = "tBoxSetCurrentLimit";
-            this.tBoxSetCurrentLimit.Size = new System.Drawing.Size(126, 22);
+            this.tBoxSetCurrentLimit.Size = new System.Drawing.Size(246, 22);
             this.tBoxSetCurrentLimit.TabIndex = 8;
+            this.tBoxSetCurrentLimit.Text = "0";
+            this.tBoxSetCurrentLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tBoxSetCurrentLimit.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tBoxSetCurrentLimit_KeyPress);
             // 
             // tBoxSetTargetValue
             // 
             this.tBoxSetTargetValue.Location = new System.Drawing.Point(145, 29);
             this.tBoxSetTargetValue.Name = "tBoxSetTargetValue";
-            this.tBoxSetTargetValue.Size = new System.Drawing.Size(126, 22);
+            this.tBoxSetTargetValue.Size = new System.Drawing.Size(246, 22);
             this.tBoxSetTargetValue.TabIndex = 5;
+            this.tBoxSetTargetValue.Text = "0";
+            this.tBoxSetTargetValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tBoxSetTargetValue.TextChanged += new System.EventHandler(this.tBoxSetTargetValue_TextChanged);
+            this.tBoxSetTargetValue.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tBoxSetTargetValue_KeyPress);
             // 
             // btnSendDataByValues
             // 
@@ -418,6 +430,7 @@
             this.btnSendDataByValues.TabIndex = 3;
             this.btnSendDataByValues.Text = "->send data";
             this.btnSendDataByValues.UseVisualStyleBackColor = true;
+            this.btnSendDataByValues.Click += new System.EventHandler(this.btnSendDataByValues_Click);
             // 
             // label8
             // 
@@ -436,9 +449,10 @@
             "off"});
             this.cBoxSetOutputByValues.Location = new System.Drawing.Point(145, 92);
             this.cBoxSetOutputByValues.Name = "cBoxSetOutputByValues";
-            this.cBoxSetOutputByValues.Size = new System.Drawing.Size(167, 24);
+            this.cBoxSetOutputByValues.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cBoxSetOutputByValues.Size = new System.Drawing.Size(246, 24);
             this.cBoxSetOutputByValues.TabIndex = 6;
-            this.cBoxSetOutputByValues.Text = "-";
+            this.cBoxSetOutputByValues.Text = "off";
             // 
             // label7
             // 
@@ -460,20 +474,64 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.tBoxCurrentLimit);
+            this.groupBox6.Controls.Add(this.tBoxtargetVoltage);
+            this.groupBox6.Controls.Add(this.label15);
+            this.groupBox6.Controls.Add(this.label14);
             this.groupBox6.Controls.Add(this.cBoxSetOutputByTrackbar);
             this.groupBox6.Controls.Add(this.tBarSetCurrentLimit);
             this.groupBox6.Controls.Add(this.tBarSetTargetVoltage);
             this.groupBox6.Controls.Add(this.label11);
             this.groupBox6.Controls.Add(this.chBoxSendAutomatically);
             this.groupBox6.Controls.Add(this.label12);
-            this.groupBox6.Controls.Add(this.button3);
+            this.groupBox6.Controls.Add(this.btnSendDataByTrackBar);
             this.groupBox6.Controls.Add(this.label13);
             this.groupBox6.Location = new System.Drawing.Point(363, 425);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(329, 249);
+            this.groupBox6.Size = new System.Drawing.Size(447, 249);
             this.groupBox6.TabIndex = 5;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Send with TrackBar";
+            // 
+            // tBoxCurrentLimit
+            // 
+            this.tBoxCurrentLimit.Location = new System.Drawing.Point(280, 80);
+            this.tBoxCurrentLimit.Name = "tBoxCurrentLimit";
+            this.tBoxCurrentLimit.ReadOnly = true;
+            this.tBoxCurrentLimit.Size = new System.Drawing.Size(100, 22);
+            this.tBoxCurrentLimit.TabIndex = 19;
+            this.tBoxCurrentLimit.Text = "0";
+            this.tBoxCurrentLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tBoxCurrentLimit.TextChanged += new System.EventHandler(this.tBoxCurrentLimit_TextChanged);
+            // 
+            // tBoxtargetVoltage
+            // 
+            this.tBoxtargetVoltage.Location = new System.Drawing.Point(280, 23);
+            this.tBoxtargetVoltage.Name = "tBoxtargetVoltage";
+            this.tBoxtargetVoltage.ReadOnly = true;
+            this.tBoxtargetVoltage.Size = new System.Drawing.Size(100, 22);
+            this.tBoxtargetVoltage.TabIndex = 18;
+            this.tBoxtargetVoltage.Text = "0";
+            this.tBoxtargetVoltage.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tBoxtargetVoltage.TextChanged += new System.EventHandler(this.tBoxtargetVoltage_TextChanged);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(386, 83);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(35, 16);
+            this.label15.TabIndex = 17;
+            this.label15.Text = "[mA]";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(386, 26);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(35, 16);
+            this.label14.TabIndex = 16;
+            this.label14.Text = "[mV]";
             // 
             // cBoxSetOutputByTrackbar
             // 
@@ -485,7 +543,7 @@
             this.cBoxSetOutputByTrackbar.Name = "cBoxSetOutputByTrackbar";
             this.cBoxSetOutputByTrackbar.Size = new System.Drawing.Size(167, 24);
             this.cBoxSetOutputByTrackbar.TabIndex = 11;
-            this.cBoxSetOutputByTrackbar.Text = "-";
+            this.cBoxSetOutputByTrackbar.Text = "off";
             // 
             // tBarSetCurrentLimit
             // 
@@ -493,6 +551,7 @@
             this.tBarSetCurrentLimit.Name = "tBarSetCurrentLimit";
             this.tBarSetCurrentLimit.Size = new System.Drawing.Size(104, 56);
             this.tBarSetCurrentLimit.TabIndex = 15;
+            this.tBarSetCurrentLimit.Scroll += new System.EventHandler(this.tBarSetCurrentLimit_Scroll);
             // 
             // tBarSetTargetVoltage
             // 
@@ -500,7 +559,7 @@
             this.tBarSetTargetVoltage.Name = "tBarSetTargetVoltage";
             this.tBarSetTargetVoltage.Size = new System.Drawing.Size(104, 56);
             this.tBarSetTargetVoltage.TabIndex = 14;
-            this.tBarSetTargetVoltage.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.tBarSetTargetVoltage.Scroll += new System.EventHandler(this.tBarSetTargetVoltage_Scroll);
             // 
             // label11
             // 
@@ -520,6 +579,7 @@
             this.chBoxSendAutomatically.TabIndex = 3;
             this.chBoxSendAutomatically.Text = "send automatically";
             this.chBoxSendAutomatically.UseVisualStyleBackColor = true;
+            this.chBoxSendAutomatically.CheckedChanged += new System.EventHandler(this.chBoxSendAutomatically_CheckedChanged);
             // 
             // label12
             // 
@@ -530,14 +590,15 @@
             this.label12.TabIndex = 12;
             this.label12.Text = "SetCurrentLimit";
             // 
-            // button3
+            // btnSendDataByTrackBar
             // 
-            this.button3.Location = new System.Drawing.Point(16, 205);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(103, 23);
-            this.button3.TabIndex = 11;
-            this.button3.Text = "->send data";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnSendDataByTrackBar.Location = new System.Drawing.Point(16, 205);
+            this.btnSendDataByTrackBar.Name = "btnSendDataByTrackBar";
+            this.btnSendDataByTrackBar.Size = new System.Drawing.Size(103, 23);
+            this.btnSendDataByTrackBar.TabIndex = 11;
+            this.btnSendDataByTrackBar.Text = "->send data";
+            this.btnSendDataByTrackBar.UseVisualStyleBackColor = true;
+            this.btnSendDataByTrackBar.Click += new System.EventHandler(this.button3_Click);
             // 
             // label13
             // 
@@ -624,8 +685,12 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.CheckBox chBoxSendAutomatically;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnSendDataByTrackBar;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox tBoxCurrentLimit;
+        private System.Windows.Forms.TextBox tBoxtargetVoltage;
     }
 }
 
