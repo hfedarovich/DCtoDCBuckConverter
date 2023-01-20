@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace DCtoDCBuckConverter
 {
@@ -26,6 +27,8 @@ namespace DCtoDCBuckConverter
         string OutputMode;
         string Output;
         bool graph = true;
+
+        private int _countseconds = 0;
 
         public void wait(int milliseconds)
         {
@@ -52,6 +55,7 @@ namespace DCtoDCBuckConverter
         public Form1()
         {
             InitializeComponent();
+            StartPosition = FormStartPosition.CenterScreen; 
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -111,6 +115,20 @@ namespace DCtoDCBuckConverter
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            timer1.Enabled = true;
+
+            chart1.ChartAreas[0].AxisY.Maximum = 100;
+            chart1.ChartAreas[0].AxisY.Minimum = -5;
+
+            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "H:mm:ss";
+            chart1.Series[0].XValueType = ChartValueType.DateTime;
+
+            chart1.ChartAreas[0].AxisX.Minimum = DateTime.Now.ToOADate(); ;
+            chart1.ChartAreas[0].AxisX.Maximum = DateTime.Now.AddMinutes(1).ToOADate();
+
+            chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
+            chart1.ChartAreas[0].AxisX.Interval = 5;
+
             string[] ports = SerialPort.GetPortNames();
             cBoxCOMPort.Items.AddRange(ports);
             btnOpen.Enabled = true;
@@ -131,6 +149,10 @@ namespace DCtoDCBuckConverter
                 CurrentLimit = Convert.ToInt32(datalist[3]);
                 OutputMode = datalist[4];
                 Output = datalist[5];
+
+               
+
+
                 if (Output == "on")
                 {
                     if (graph)
@@ -138,7 +160,7 @@ namespace DCtoDCBuckConverter
                         //empty chart
                         graph = false;
                     }
-                    //print all the points
+                    
 
                 }
                 if (Output == "off")
@@ -353,7 +375,14 @@ namespace DCtoDCBuckConverter
 
         private void time_1Tick(object sender, EventArgs e)
         {
+            if (serialPort1.IsOpen)
+            {
+                DateTime timeNow = DateTime.Now;
+                int value = 10;
 
+                chart1.Series[0].Points.AddXY(timeNow, value);
+            }
+            
         }
 
         private void btnStopGraph_Click(object sender, EventArgs e)
