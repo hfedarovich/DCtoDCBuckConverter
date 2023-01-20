@@ -16,6 +16,7 @@ namespace DCtoDCBuckConverter
     public partial class Form1 : Form
     {
         string senddata;
+        string senddata_old;
         string receivedata;
         string datain;
         Int32  Voltage;
@@ -26,6 +27,28 @@ namespace DCtoDCBuckConverter
         string Output;
         bool graph = true;
 
+        public void wait(int milliseconds)
+        {
+            var timer1 = new System.Windows.Forms.Timer();
+            if (milliseconds == 0 || milliseconds < 0) return;
+
+            // Console.WriteLine("start wait timer");
+            timer1.Interval = milliseconds;
+            timer1.Enabled = true;
+            timer1.Start();
+
+            timer1.Tick += (s, e) =>
+            {
+                timer1.Enabled = false;
+                timer1.Stop();
+                // Console.WriteLine("stop wait timer");
+            };
+
+            while (timer1.Enabled)
+            {
+                Application.DoEvents();
+            }
+        }
         public Form1()
         {
             InitializeComponent();
@@ -100,7 +123,7 @@ namespace DCtoDCBuckConverter
             {
                 datain = serialPort1.ReadExisting();
                 Int32 count = 6;
-                string[] separator = { "\"Voltage\": ", ",\n\"Current\": ", ",\n\"TargetVoltage\": ", ",\n\"CurrentLimit\": ", ",\n\"OutputMode\": \"", "\",\n\"Output\": \"", "\"" };
+                string[] separator = { "{\n\"Voltage\": ", ",\n\"Current\": ", ",\n\"TargetVoltage\": ", ",\n\"CurrentLimit\": ", ",\n\"OutputMode\": \"", "\",\n\"Output\": \"", "\"\n}" };
                 string[] datalist = datain.Split(separator, count, StringSplitOptions.None);
                 Voltage = Convert.ToInt32(datalist[0]);
                 Current = Convert.ToInt32(datalist[1]);
@@ -173,7 +196,7 @@ namespace DCtoDCBuckConverter
             {
                 senddata = tBoxSendData.Text;
                 serialPort1.Write(senddata);
-            }
+            }   
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -194,12 +217,15 @@ namespace DCtoDCBuckConverter
 
         private void tBoxReceiveData_TextChanged(object sender, EventArgs e)
         {
-            receivedata = serialPort1.ReadExisting();
             
+        }
+        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            receivedata = serialPort1.ReadExisting();
+
             //this methode is for showing the data in textbox
             this.Invoke(new EventHandler(ShowData));
         }
-
         private void ShowData(object sender, EventArgs e)
         {
             if (chBoxUpdate.Checked)
@@ -241,7 +267,7 @@ namespace DCtoDCBuckConverter
         {
             if (serialPort1.IsOpen)
             {
-                senddata = "\"SetTargetVoltage\": " + Convert.ToInt32(tBoxSetTargetValue.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxSetCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByValues.Text +"\"\n";
+                senddata = "{\n\"SetTargetVoltage\": " + Convert.ToInt32(tBoxSetTargetValue.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxSetCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByValues.Text + "\"\n}";
                 serialPort1.Write(senddata);
             }
         }
@@ -270,7 +296,7 @@ namespace DCtoDCBuckConverter
         {
             if (serialPort1.IsOpen)
             {
-                senddata = "\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"\n";
+                senddata = "{\n\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"\n}";
                 serialPort1.Write(senddata);
             }
         }
@@ -282,8 +308,23 @@ namespace DCtoDCBuckConverter
                 btnSendData.Enabled = false;
                 btnSendDataByValues.Enabled = false;
                 btnSendDataByTrackBar.Enabled = false;
-                senddata = "\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"\n";
+                senddata = "{\n\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"\n}";
+                senddata_old=senddata;
                 serialPort1.Write(senddata);
+
+                while (chBoxSendAutomatically.Checked && serialPort1.IsOpen)
+                {
+                    btnSendData.Enabled = false;
+                    btnSendDataByValues.Enabled = false;
+                    btnSendDataByTrackBar.Enabled = false;
+                    senddata_old = senddata;
+                    senddata = "{\n\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"\n}";
+                    if (senddata_old != senddata)
+                    { 
+                        serialPort1.Write(senddata);
+                    }
+                    wait(500);
+                }
             }
             
             else if (chBoxSendAutomatically.Checked && !serialPort1.IsOpen)
@@ -329,5 +370,12 @@ namespace DCtoDCBuckConverter
         {
             //Clear graph
         }
+
+        private void chBoxUpdate_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 }

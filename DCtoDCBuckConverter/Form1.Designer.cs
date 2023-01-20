@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cBoxParity = new System.Windows.Forms.ComboBox();
@@ -131,9 +131,9 @@
             // 
             this.cBoxParity.FormattingEnabled = true;
             this.cBoxParity.Items.AddRange(new object[] {
-            "none",
-            "odd",
-            "even"});
+            "None",
+            "Odd",
+            "Even"});
             this.cBoxParity.Location = new System.Drawing.Point(152, 151);
             this.cBoxParity.Name = "cBoxParity";
             this.cBoxParity.Size = new System.Drawing.Size(149, 24);
@@ -321,6 +321,7 @@
             this.tBoxSendData.Name = "tBoxSendData";
             this.tBoxSendData.Size = new System.Drawing.Size(416, 135);
             this.tBoxSendData.TabIndex = 1;
+            this.tBoxSendData.Text = "\"SetTargetVoltage\": x,\r\n  \"SetCurrentLimit\": x,\r\n  \"SetOutput\": \"x\"";
             // 
             // btnSendData
             // 
@@ -353,6 +354,7 @@
             this.chBoxUpdate.TabIndex = 2;
             this.chBoxUpdate.Text = "auto-update";
             this.chBoxUpdate.UseVisualStyleBackColor = true;
+            this.chBoxUpdate.CheckedChanged += new System.EventHandler(this.chBoxUpdate_CheckedChanged);
             // 
             // tBoxReceiveData
             // 
@@ -363,6 +365,7 @@
             this.tBoxReceiveData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tBoxReceiveData.Size = new System.Drawing.Size(296, 205);
             this.tBoxReceiveData.TabIndex = 1;
+            this.tBoxReceiveData.Text = " ";
             this.tBoxReceiveData.TextChanged += new System.EventHandler(this.tBoxReceiveData_TextChanged);
             // 
             // btnClear
@@ -374,6 +377,10 @@
             this.btnClear.Text = "CLEAR";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // serialPort1
+            // 
+            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
             // 
             // groupBox5
             // 
@@ -557,17 +564,23 @@
             // 
             // tBarSetCurrentLimit
             // 
+            this.tBarSetCurrentLimit.LargeChange = 100;
             this.tBarSetCurrentLimit.Location = new System.Drawing.Point(167, 83);
+            this.tBarSetCurrentLimit.Maximum = 1000;
             this.tBarSetCurrentLimit.Name = "tBarSetCurrentLimit";
             this.tBarSetCurrentLimit.Size = new System.Drawing.Size(104, 56);
+            this.tBarSetCurrentLimit.SmallChange = 50;
             this.tBarSetCurrentLimit.TabIndex = 15;
             this.tBarSetCurrentLimit.Scroll += new System.EventHandler(this.tBarSetCurrentLimit_Scroll);
             // 
             // tBarSetTargetVoltage
             // 
+            this.tBarSetTargetVoltage.LargeChange = 1000;
             this.tBarSetTargetVoltage.Location = new System.Drawing.Point(167, 21);
+            this.tBarSetTargetVoltage.Maximum = 30000;
             this.tBarSetTargetVoltage.Name = "tBarSetTargetVoltage";
             this.tBarSetTargetVoltage.Size = new System.Drawing.Size(104, 56);
+            this.tBarSetTargetVoltage.SmallChange = 500;
             this.tBarSetTargetVoltage.TabIndex = 14;
             this.tBarSetTargetVoltage.Scroll += new System.EventHandler(this.tBarSetTargetVoltage_Scroll);
             // 
@@ -621,10 +634,10 @@
             // 
             // chart1
             // 
-            chartArea4.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.chart1.Legends.Add(legend4);
+            chartArea3.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chart1.Legends.Add(legend3);
             this.chart1.Location = new System.Drawing.Point(15, 28);
             this.chart1.Name = "chart1";
             this.chart1.Size = new System.Drawing.Size(662, 506);
