@@ -11,6 +11,7 @@ using System.IO.Ports;
 using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Windows.Forms.DataVisualization.Charting;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace DCtoDCBuckConverter
 {
@@ -19,14 +20,14 @@ namespace DCtoDCBuckConverter
         string senddata;
         string senddata_old;
         string receivedata;
-        string datain;
-        Int32  Voltage;
-        Int32 TargetVoltage;
-        Int32 Current;
-        Int32 CurrentLimit;
+        string Voltage;
+        string TargetVoltage;
+        string Current;
+        string CurrentLimit;
         string OutputMode;
-        string Output;
+        string Output = "off";
         bool graph = true;
+        bool print = true;
 
         private int _countseconds = 0;
 
@@ -115,19 +116,7 @@ namespace DCtoDCBuckConverter
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            timer1.Enabled = true;
-
-            chart1.ChartAreas[0].AxisY.Maximum = 100;
-            chart1.ChartAreas[0].AxisY.Minimum = -5;
-
-            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "H:mm:ss";
-            chart1.Series[0].XValueType = ChartValueType.DateTime;
-
-            chart1.ChartAreas[0].AxisX.Minimum = DateTime.Now.ToOADate(); ;
-            chart1.ChartAreas[0].AxisX.Maximum = DateTime.Now.AddMinutes(1).ToOADate();
-
-            chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
-            chart1.ChartAreas[0].AxisX.Interval = 5;
+            
 
             string[] ports = SerialPort.GetPortNames();
             cBoxCOMPort.Items.AddRange(ports);
@@ -137,37 +126,9 @@ namespace DCtoDCBuckConverter
             btnSendDataByValues.Enabled = true;
             btnSendDataByTrackBar.Enabled = true;
 
-            if (serialPort1.IsOpen)
-            {
-                datain = serialPort1.ReadExisting();
-                Int32 count = 6;
-                string[] separator = { "{\n\"Voltage\": ", ",\n\"Current\": ", ",\n\"TargetVoltage\": ", ",\n\"CurrentLimit\": ", ",\n\"OutputMode\": \"", "\",\n\"Output\": \"", "\"\n}" };
-                string[] datalist = datain.Split(separator, count, StringSplitOptions.None);
-                Voltage = Convert.ToInt32(datalist[0]);
-                Current = Convert.ToInt32(datalist[1]);
-                TargetVoltage = Convert.ToInt32(datalist[2]);
-                CurrentLimit = Convert.ToInt32(datalist[3]);
-                OutputMode = datalist[4];
-                Output = datalist[5];
+            
 
-               
-
-
-                if (Output == "on")
-                {
-                    if (graph)
-                    {
-                        //empty chart
-                        graph = false;
-                    }
-                    
-
-                }
-                if (Output == "off")
-                {
-                    graph = true;
-                }
-            }
+            
 
 
 
@@ -190,6 +151,20 @@ namespace DCtoDCBuckConverter
                 btnOpen.Enabled = false;
                 btnClose.Enabled = true;
                 lblstatus.Text = "connected";
+
+                timer.Enabled = true;
+
+                chart1.ChartAreas[0].AxisY.Maximum = 100;
+                chart1.ChartAreas[0].AxisY.Minimum = -5;
+
+                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "H:mm:ss";
+                chart1.Series[0].XValueType = ChartValueType.DateTime;
+
+                chart1.ChartAreas[0].AxisX.Minimum = DateTime.Now.ToOADate(); ;
+                chart1.ChartAreas[0].AxisX.Maximum = DateTime.Now.AddMinutes(1).ToOADate();
+
+                chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chart1.ChartAreas[0].AxisX.Interval = 5;
             }
             catch (Exception err)
             {
@@ -209,6 +184,18 @@ namespace DCtoDCBuckConverter
                 btnOpen.Enabled = true;
                 btnClose.Enabled = false;
                 lblstatus.Text = "disconnected";
+                timer.Enabled = false;
+                chart1.ChartAreas[0].AxisY.Maximum = 100;
+                chart1.ChartAreas[0].AxisY.Minimum = -5;
+
+                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "H:mm:ss";
+                chart1.Series[0].XValueType = ChartValueType.DateTime;
+
+                chart1.ChartAreas[0].AxisX.Minimum = DateTime.Now.ToOADate(); ;
+                chart1.ChartAreas[0].AxisX.Maximum = DateTime.Now.AddMinutes(1).ToOADate();
+
+                chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                chart1.ChartAreas[0].AxisX.Interval = 5;
             }
         }
 
@@ -218,7 +205,11 @@ namespace DCtoDCBuckConverter
             {
                 senddata = tBoxSendData.Text;
                 serialPort1.Write(senddata);
-            }   
+            }
+            else
+            {
+                MessageBox.Show("you need to connect to a serial port first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -244,12 +235,17 @@ namespace DCtoDCBuckConverter
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             receivedata = serialPort1.ReadExisting();
+            if (receivedata != "")
+            {
 
-            //this methode is for showing the data in textbox
-            this.Invoke(new EventHandler(ShowData));
+                //this methode is for showing the data in textbox
+                this.Invoke(new EventHandler(ShowData));
+            }
+            
         }
         private void ShowData(object sender, EventArgs e)
         {
+
             if (chBoxUpdate.Checked)
             {
                 tBoxReceiveData.Text = receivedata;
@@ -258,7 +254,27 @@ namespace DCtoDCBuckConverter
             {
                 tBoxReceiveData.Text += receivedata;
             }
+
+            Int32 count = 8;
             
+            string[] separator = { "{\"Voltage\": ", ",\"Current\": ", ",\"TargetVoltage\": ", ",\"CurrentLimit\": ", ",\"OutputMode\": \"", "\",\"Output\": \"", "\"}" };
+            string[] datalist = receivedata.Split(separator, count, StringSplitOptions.None);
+
+            Voltage = datalist[1];
+            Current = datalist[2];
+            TargetVoltage = datalist[3];
+            CurrentLimit = datalist[4];
+            OutputMode = datalist[5];
+            Output = datalist[6];
+
+            lblvoltage.Text = "Voltage: "+Voltage;
+            lbltargetvoltage.Text = "TargetVoltage: " + TargetVoltage;
+            lblcurrent.Text = "Current: " + Current;
+            lblcurrentlimit.Text = "CurrentLimit: " + CurrentLimit;
+            lbloutputmode.Text = "OutputMode: " + OutputMode;
+            lbloutput.Text = "Output: " + Output;
+
+
         }
 
 
@@ -289,8 +305,12 @@ namespace DCtoDCBuckConverter
         {
             if (serialPort1.IsOpen)
             {
-                senddata = "{\n\"SetTargetVoltage\": " + Convert.ToInt32(tBoxSetTargetValue.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxSetCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByValues.Text + "\"\n}";
+                senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxSetTargetValue.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxSetCurrentLimit.Text) + ",\"SetOutput\": \"" + cBoxSetOutputByValues.Text + "\"}";
                 serialPort1.Write(senddata);
+            }
+            else
+            {
+                MessageBox.Show("you need to connect to a serial port first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -318,8 +338,12 @@ namespace DCtoDCBuckConverter
         {
             if (serialPort1.IsOpen)
             {
-                senddata = "{\n\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"\n}";
+                senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + ",\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"}";
                 serialPort1.Write(senddata);
+            }
+            else 
+            {
+                MessageBox.Show("you need to connect to a serial port first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -330,7 +354,7 @@ namespace DCtoDCBuckConverter
                 btnSendData.Enabled = false;
                 btnSendDataByValues.Enabled = false;
                 btnSendDataByTrackBar.Enabled = false;
-                senddata = "{\n\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"\n}";
+                senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + ",\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"}";
                 senddata_old=senddata;
                 serialPort1.Write(senddata);
 
@@ -340,7 +364,7 @@ namespace DCtoDCBuckConverter
                     btnSendDataByValues.Enabled = false;
                     btnSendDataByTrackBar.Enabled = false;
                     senddata_old = senddata;
-                    senddata = "{\n\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + "\n\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + "\n\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"\n}";
+                    senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + ",\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"}";
                     if (senddata_old != senddata)
                     { 
                         serialPort1.Write(senddata);
@@ -375,29 +399,28 @@ namespace DCtoDCBuckConverter
 
         private void time_1Tick(object sender, EventArgs e)
         {
-            if (serialPort1.IsOpen)
-            {
-                DateTime timeNow = DateTime.Now;
-                int value = 10;
-
-                chart1.Series[0].Points.AddXY(timeNow, value);
-            }
+            
             
         }
 
         private void btnStopGraph_Click(object sender, EventArgs e)
         {
-            //Stop graph
+            print = false;
         }
 
         private void btnContinueGraph_Click(object sender, EventArgs e)
         {
-            //Continue graph
+            print = true;
         }
 
         private void btnClearGraph_Click(object sender, EventArgs e)
         {
-            //Clear graph
+            _countseconds = 0;
+            chart1.ChartAreas[0].AxisX.Minimum = DateTime.Now.ToOADate(); ;
+            chart1.ChartAreas[0].AxisX.Maximum = DateTime.Now.AddMinutes(1).ToOADate();
+
+            chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
+            chart1.ChartAreas[0].AxisX.Interval = 5;
         }
 
         private void chBoxUpdate_CheckedChanged(object sender, EventArgs e)
@@ -405,6 +428,61 @@ namespace DCtoDCBuckConverter
 
         }
 
-        
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                DateTime timeNow = DateTime.Now;
+                Int32 valuevoltage = Convert.ToInt32(Voltage);
+                Int32 valuecurrent = Convert.ToInt32(Current);
+                Int32 valuetargetvoltage = Convert.ToInt32(TargetVoltage);
+                Int32 valuecurrentlimit = Convert.ToInt32(CurrentLimit);
+                if (print == true && Output == "on")
+                {
+                    chart1.Series[0].Points.AddXY(timeNow, valuevoltage);
+                    chart1.Series[1].Points.AddXY(timeNow, valuecurrent);
+                    chart1.Series[2].Points.AddXY(timeNow, valuetargetvoltage);
+                    chart1.Series[3].Points.AddXY(timeNow, valuecurrentlimit);
+                    if (_countseconds >= 60)
+                    {
+                        _countseconds = 0;
+                        chart1.ChartAreas[0].AxisX.Minimum = DateTime.Now.ToOADate(); ;
+                        chart1.ChartAreas[0].AxisX.Maximum = DateTime.Now.AddMinutes(1).ToOADate();
+
+                        chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
+                        chart1.ChartAreas[0].AxisX.Interval = 5;
+
+                    }
+                }
+
+
+                _countseconds++;
+
+
+            }
+        }
     }
 }
+/*
+ 
+            if (datain != "")
+            {
+                
+                string[] separator = { "{\"Voltage\": ", ",\"Current\": ", ",\"TargetVoltage\": ", ",\"CurrentLimit\": ", ",\"OutputMode\": \"", "\",\"Output\": \"", "\"}" };
+                string[] datalist = datain.Split(separator, count, StringSplitOptions.None);
+                //Voltage = Convert.ToInt32(datalist[1]);
+                Voltage = datalist[1];
+                //Current = Convert.ToInt32(datalist[2]);
+                Current = datalist[2];
+                //TargetVoltage = Convert.ToInt32(datalist[3]);
+                TargetVoltage = datalist[3];
+                //CurrentLimit = Convert.ToInt32(datalist[4]);
+                CurrentLimit = datalist[4];
+                OutputMode = datalist[5];
+                Output = datalist[6];
+                lblvoltage.Text = "Voltage: " + Current;
+                
+Voltage = datain;
+lblvoltage.Text = Voltage;
+            } 
+  */

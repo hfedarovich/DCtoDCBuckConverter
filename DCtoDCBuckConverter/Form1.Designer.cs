@@ -33,6 +33,8 @@
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cBoxParity = new System.Windows.Forms.ComboBox();
@@ -84,9 +86,16 @@
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.lbloutput = new System.Windows.Forms.Label();
+            this.lbloutputmode = new System.Windows.Forms.Label();
+            this.lblcurrentlimit = new System.Windows.Forms.Label();
+            this.lbltargetvoltage = new System.Windows.Forms.Label();
+            this.lblcurrent = new System.Windows.Forms.Label();
+            this.lblvoltage = new System.Windows.Forms.Label();
             this.btnContinueGraph = new System.Windows.Forms.Button();
             this.btnClearGraph = new System.Windows.Forms.Button();
             this.btnStopGraph = new System.Windows.Forms.Button();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -323,7 +332,7 @@
             this.tBoxSendData.Name = "tBoxSendData";
             this.tBoxSendData.Size = new System.Drawing.Size(416, 135);
             this.tBoxSendData.TabIndex = 1;
-            this.tBoxSendData.Text = "\"SetTargetVoltage\": x,\r\n  \"SetCurrentLimit\": x,\r\n  \"SetOutput\": \"x\"";
+            this.tBoxSendData.Text = "{\r\n\"SetTargetVoltage\": x,\r\n  \"SetCurrentLimit\": x,\r\n  \"SetOutput\": \"x\"\r\n}";
             // 
             // btnSendData
             // 
@@ -654,8 +663,25 @@
             series2.Color = System.Drawing.Color.Blue;
             series2.Legend = "Legend1";
             series2.Name = "Current";
+            series3.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series3.BorderWidth = 3;
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            series3.LabelBorderColor = System.Drawing.Color.White;
+            series3.Legend = "Legend1";
+            series3.Name = "TargetVoltage";
+            series4.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series4.BorderWidth = 3;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Color = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            series4.Legend = "Legend1";
+            series4.Name = "CurrentLimit";
             this.chart1.Series.Add(series1);
             this.chart1.Series.Add(series2);
+            this.chart1.Series.Add(series3);
+            this.chart1.Series.Add(series4);
             this.chart1.Size = new System.Drawing.Size(662, 506);
             this.chart1.TabIndex = 6;
             this.chart1.Text = "chart1";
@@ -668,6 +694,12 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.lbloutput);
+            this.groupBox7.Controls.Add(this.lbloutputmode);
+            this.groupBox7.Controls.Add(this.lblcurrentlimit);
+            this.groupBox7.Controls.Add(this.lbltargetvoltage);
+            this.groupBox7.Controls.Add(this.lblcurrent);
+            this.groupBox7.Controls.Add(this.lblvoltage);
             this.groupBox7.Controls.Add(this.btnContinueGraph);
             this.groupBox7.Controls.Add(this.btnClearGraph);
             this.groupBox7.Controls.Add(this.btnStopGraph);
@@ -678,6 +710,60 @@
             this.groupBox7.TabIndex = 6;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Graph";
+            // 
+            // lbloutput
+            // 
+            this.lbloutput.AutoSize = true;
+            this.lbloutput.Location = new System.Drawing.Point(465, 621);
+            this.lbloutput.Name = "lbloutput";
+            this.lbloutput.Size = new System.Drawing.Size(48, 16);
+            this.lbloutput.TabIndex = 14;
+            this.lbloutput.Text = "Output:";
+            // 
+            // lbloutputmode
+            // 
+            this.lbloutputmode.AutoSize = true;
+            this.lbloutputmode.Location = new System.Drawing.Point(465, 595);
+            this.lbloutputmode.Name = "lbloutputmode";
+            this.lbloutputmode.Size = new System.Drawing.Size(83, 16);
+            this.lbloutputmode.TabIndex = 13;
+            this.lbloutputmode.Text = "OutputMode:";
+            // 
+            // lblcurrentlimit
+            // 
+            this.lblcurrentlimit.AutoSize = true;
+            this.lblcurrentlimit.Location = new System.Drawing.Point(238, 621);
+            this.lblcurrentlimit.Name = "lblcurrentlimit";
+            this.lblcurrentlimit.Size = new System.Drawing.Size(79, 16);
+            this.lblcurrentlimit.TabIndex = 12;
+            this.lblcurrentlimit.Text = "CurrentLimit:";
+            // 
+            // lbltargetvoltage
+            // 
+            this.lbltargetvoltage.AutoSize = true;
+            this.lbltargetvoltage.Location = new System.Drawing.Point(12, 621);
+            this.lbltargetvoltage.Name = "lbltargetvoltage";
+            this.lbltargetvoltage.Size = new System.Drawing.Size(97, 16);
+            this.lbltargetvoltage.TabIndex = 11;
+            this.lbltargetvoltage.Text = "TargetVoltage:";
+            // 
+            // lblcurrent
+            // 
+            this.lblcurrent.AutoSize = true;
+            this.lblcurrent.Location = new System.Drawing.Point(238, 595);
+            this.lblcurrent.Name = "lblcurrent";
+            this.lblcurrent.Size = new System.Drawing.Size(52, 16);
+            this.lblcurrent.TabIndex = 10;
+            this.lblcurrent.Text = "Current:";
+            // 
+            // lblvoltage
+            // 
+            this.lblvoltage.AutoSize = true;
+            this.lblvoltage.Location = new System.Drawing.Point(12, 595);
+            this.lblvoltage.Name = "lblvoltage";
+            this.lblvoltage.Size = new System.Drawing.Size(57, 16);
+            this.lblvoltage.TabIndex = 5;
+            this.lblvoltage.Text = "Voltage:";
             // 
             // btnContinueGraph
             // 
@@ -708,6 +794,11 @@
             this.btnStopGraph.Text = "STOP";
             this.btnStopGraph.UseVisualStyleBackColor = true;
             this.btnStopGraph.Click += new System.EventHandler(this.btnStopGraph_Click);
+            // 
+            // timer
+            // 
+            this.timer.Interval = 1000;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // Form1
             // 
@@ -740,6 +831,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.tBarSetTargetVoltage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -800,6 +892,13 @@
         private System.Windows.Forms.Button btnContinueGraph;
         private System.Windows.Forms.Button btnClearGraph;
         private System.Windows.Forms.Button btnStopGraph;
+        private System.Windows.Forms.Label lblvoltage;
+        private System.Windows.Forms.Label lbloutput;
+        private System.Windows.Forms.Label lbloutputmode;
+        private System.Windows.Forms.Label lblcurrentlimit;
+        private System.Windows.Forms.Label lbltargetvoltage;
+        private System.Windows.Forms.Label lblcurrent;
+        private System.Windows.Forms.Timer timer;
     }
 }
 
