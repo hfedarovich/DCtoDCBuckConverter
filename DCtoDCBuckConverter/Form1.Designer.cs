@@ -474,14 +474,14 @@
             // 
             this.cBoxSetOutputByValues.FormattingEnabled = true;
             this.cBoxSetOutputByValues.Items.AddRange(new object[] {
-            "on",
-            "off"});
+            "1",
+            "0"});
             this.cBoxSetOutputByValues.Location = new System.Drawing.Point(145, 92);
             this.cBoxSetOutputByValues.Name = "cBoxSetOutputByValues";
             this.cBoxSetOutputByValues.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.cBoxSetOutputByValues.Size = new System.Drawing.Size(246, 24);
             this.cBoxSetOutputByValues.TabIndex = 6;
-            this.cBoxSetOutputByValues.Text = "off";
+            this.cBoxSetOutputByValues.Text = "0";
             // 
             // label7
             // 
@@ -566,13 +566,13 @@
             // 
             this.cBoxSetOutputByTrackbar.FormattingEnabled = true;
             this.cBoxSetOutputByTrackbar.Items.AddRange(new object[] {
-            "on",
-            "off"});
+            "1",
+            "0"});
             this.cBoxSetOutputByTrackbar.Location = new System.Drawing.Point(145, 145);
             this.cBoxSetOutputByTrackbar.Name = "cBoxSetOutputByTrackbar";
             this.cBoxSetOutputByTrackbar.Size = new System.Drawing.Size(167, 24);
             this.cBoxSetOutputByTrackbar.TabIndex = 11;
-            this.cBoxSetOutputByTrackbar.Text = "off";
+            this.cBoxSetOutputByTrackbar.Text = "0";
             // 
             // tBarSetCurrentLimit
             // 

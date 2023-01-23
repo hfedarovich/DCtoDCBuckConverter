@@ -25,7 +25,7 @@ namespace DCtoDCBuckConverter
         string Current;
         string CurrentLimit;
         string OutputMode;
-        string Output = "off";
+        string Output = "0";
         bool graph = true;
         bool print = true;
 
@@ -305,7 +305,7 @@ namespace DCtoDCBuckConverter
         {
             if (serialPort1.IsOpen)
             {
-                senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxSetTargetValue.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxSetCurrentLimit.Text) + ",\"SetOutput\": \"" + cBoxSetOutputByValues.Text + "\"}";
+                senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxSetTargetValue.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxSetCurrentLimit.Text) + ",\"SetOutput\": \"" + Convert.ToInt32(cBoxSetOutputByValues.Text) + "\"}";
                 serialPort1.Write(senddata);
             }
             else
@@ -338,7 +338,7 @@ namespace DCtoDCBuckConverter
         {
             if (serialPort1.IsOpen)
             {
-                senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + ",\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"}";
+                senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + ",\"SetOutput\": \"" + Convert.ToInt32(cBoxSetOutputByTrackbar.Text) + "\"}";
                 serialPort1.Write(senddata);
             }
             else 
@@ -354,7 +354,7 @@ namespace DCtoDCBuckConverter
                 btnSendData.Enabled = false;
                 btnSendDataByValues.Enabled = false;
                 btnSendDataByTrackBar.Enabled = false;
-                senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + ",\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"}";
+                senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + ",\"SetOutput\": \"" + Convert.ToInt32(cBoxSetOutputByTrackbar.Text) + "\"}";
                 senddata_old=senddata;
                 serialPort1.Write(senddata);
 
@@ -364,7 +364,7 @@ namespace DCtoDCBuckConverter
                     btnSendDataByValues.Enabled = false;
                     btnSendDataByTrackBar.Enabled = false;
                     senddata_old = senddata;
-                    senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + ",\"SetOutput\": \"" + cBoxSetOutputByTrackbar.Text + "\"}";
+                    senddata = "{\"SetTargetVoltage\": " + Convert.ToInt32(tBoxtargetVoltage.Text) + ",\"SetCurrentLimit\": " + Convert.ToInt32(tBoxCurrentLimit.Text) + ",\"SetOutput\": \"" + Convert.ToInt32(cBoxSetOutputByTrackbar.Text) + "\"}";
                     if (senddata_old != senddata)
                     { 
                         serialPort1.Write(senddata);
@@ -437,7 +437,7 @@ namespace DCtoDCBuckConverter
                 Int32 valuecurrent = Convert.ToInt32(Current);
                 Int32 valuetargetvoltage = Convert.ToInt32(TargetVoltage);
                 Int32 valuecurrentlimit = Convert.ToInt32(CurrentLimit);
-                if (print == true && Output == "on")
+                if (print == true && Output == "1")
                 {
                     chart1.Series[0].Points.AddXY(timeNow, valuevoltage);
                     chart1.Series[1].Points.AddXY(timeNow, valuecurrent);
