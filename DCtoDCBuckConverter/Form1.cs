@@ -154,7 +154,7 @@ namespace DCtoDCBuckConverter
 
                 timer.Enabled = true;
 
-                chart1.ChartAreas[0].AxisY.Maximum = 100;
+                chart1.ChartAreas[0].AxisY.Maximum = 30000;
                 chart1.ChartAreas[0].AxisY.Minimum = -5;
 
                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "H:mm:ss";
@@ -165,6 +165,7 @@ namespace DCtoDCBuckConverter
 
                 chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
                 chart1.ChartAreas[0].AxisX.Interval = 5;
+                
             }
             catch (Exception err)
             {
@@ -185,7 +186,7 @@ namespace DCtoDCBuckConverter
                 btnClose.Enabled = false;
                 lblstatus.Text = "disconnected";
                 timer.Enabled = false;
-                chart1.ChartAreas[0].AxisY.Maximum = 100;
+                chart1.ChartAreas[0].AxisY.Maximum = 30000;
                 chart1.ChartAreas[0].AxisY.Minimum = -5;
 
                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "H:mm:ss";
@@ -255,25 +256,47 @@ namespace DCtoDCBuckConverter
                 tBoxReceiveData.Text += receivedata;
             }
 
-            Int32 count = 8;
-            
-            string[] separator = { "{\"Voltage\": ", ",\"Current\": ", ",\"TargetVoltage\": ", ",\"CurrentLimit\": ", ",\"OutputMode\": \"", "\",\"Output\": \"", "\"}" };
-            string[] datalist = receivedata.Split(separator, count, StringSplitOptions.None);
+            try
+            {
+                Int32 count = 8;
 
-            Voltage = datalist[1];
-            Current = datalist[2];
-            TargetVoltage = datalist[3];
-            CurrentLimit = datalist[4];
-            OutputMode = datalist[5];
-            Output = datalist[6];
+                string[] separator = { ": ", ",\"Current\": ", ",\"TargetVoltage\": ", ",\"CurrentLimit\": ", ",\"OutputMode\": ", ",\"Output\": ", "}" };
+                string[] datalist = receivedata.Split(separator, count, StringSplitOptions.None);
 
-            lblvoltage.Text = "Voltage: "+Voltage;
-            lbltargetvoltage.Text = "TargetVoltage: " + TargetVoltage;
-            lblcurrent.Text = "Current: " + Current;
-            lblcurrentlimit.Text = "CurrentLimit: " + CurrentLimit;
-            lbloutputmode.Text = "OutputMode: " + OutputMode;
-            lbloutput.Text = "Output: " + Output;
+                Voltage = datalist[1];
+                Current = datalist[2];
+                TargetVoltage = datalist[3];
+                CurrentLimit = datalist[4];
+                OutputMode = datalist[5];
+                Output = datalist[6];
 
+                lblvoltage.Text = "Voltage: " + Voltage;
+                lbltargetvoltage.Text = "TargetVoltage: " + TargetVoltage;
+                lblcurrent.Text = "Current: " + Current;
+                lblcurrentlimit.Text = "CurrentLimit: " + CurrentLimit;
+                lbloutputmode.Text = "OutputMode: " + OutputMode;
+                lbloutput.Text = "Output: " + Output;
+
+            }
+            catch
+            {
+                Voltage = "0";
+                Current = "0";
+                TargetVoltage = "0";
+                CurrentLimit = "0";
+                OutputMode = "0";
+                Output = "0";
+
+            }
+
+            /*
+            Voltage = "1";
+            Current = "1";
+            TargetVoltage = "1";
+            CurrentLimit = "1";
+            OutputMode = "1";
+            Output = "1";
+            */
 
         }
 
@@ -446,6 +469,7 @@ namespace DCtoDCBuckConverter
                     if (_countseconds >= 60)
                     {
                         _countseconds = 0;
+
                         chart1.ChartAreas[0].AxisX.Minimum = DateTime.Now.ToOADate(); ;
                         chart1.ChartAreas[0].AxisX.Maximum = DateTime.Now.AddMinutes(1).ToOADate();
 
